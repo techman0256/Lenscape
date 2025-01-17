@@ -18,16 +18,19 @@ const Home = () => {
       <div className="container mx-auto flex flex-col lg:flex-row items-start h-screen">
         {/* Stories + Feed Section */}
         <div className="lg:w-3/4 border-r border-[#7444ec] p-4 h-full">
-          <StoryBar />
-          {/* <Feed /> */}
+          <div className="mb-15">
+            <StoryBar />
+          </div>
+          <Feed />
         </div>
-  
+    
         {/* Sidebar */}
         <div className="lg:w-1/4 bg-[#7444ec] text-[#f9f8f4] p-4 h-full">
           <Sidebar />
         </div>
       </div>
-    )
+    );
+    
   } else {
     navigate('/signin');  // Redirect to the signin route
   }

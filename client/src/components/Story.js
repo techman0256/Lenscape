@@ -45,7 +45,6 @@ const Story = ({ story, onClose }) => {
 
         {/* Horizontal Spacing before the Story Div */}
         <div className="mt-10 px-4">
-
             {/* Slider Container */}
             <div className="story-slider-container relative w-full max-w-[400px] mx-auto">
                 <Slider {...settings}>
