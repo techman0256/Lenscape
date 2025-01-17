@@ -20,8 +20,9 @@ const stories = [
       {
         id: 4,
         username: "emma_wilson",
-        image: "https://picsum.photos/id/1017/245/300",
+        image: "https://picsum.photos/id/1004/245/300",
       },
+      
       // More stories can be added here.
     ];
 
