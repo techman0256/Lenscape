@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import React, { useState, useEffect } from 'react';
 import Navbar from "./components/Nav";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
@@ -12,27 +11,32 @@ import useAuth from "./context";
 
 const App = () => {
   const { username, isAuthenticated, loading, verifyToken } = useAuth();
-  console.log("usrename ins app.js", username);
   
-  // useEffect(() => {
-  //   if (!isAuthenticated) {
-  //     verifyToken(); // Verify token when visiting the profile page
-  //   }
-  // }, [isAuthenticated, verifyToken]);
-
   return (
     <Router>
-      <div className="flex h-screen">
+      <div className="flex h-screen overflow-hidden">
         {/* Vertical Navbar */}
-        <Navbar isAuthenticated={isAuthenticated} username={username}/>
+        <Navbar isAuthenticated={isAuthenticated} username={username} />
 
         {/* Main Content */}
-        <div className="flex flex-1 bg-[#f9f8f4]">
+        <div className="flex flex-1">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/profile/:username" element={<Profile isAuthenticated={isAuthenticated}/>} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
+            <Route 
+              path="/" 
+              element={<div className="flex-grow overflow-y-scroll h-full"><Home /></div>} 
+            />
+            <Route 
+              path="/profile/:username" 
+              element={<div className="flex-grow overflow-y-scroll h-full"><Profile isAuthenticated={isAuthenticated} /></div>} 
+            />
+            <Route 
+              path="/signin" 
+              element={<div className="flex-grow overflow-y-scroll h-full"><SignIn /></div>} 
+            />
+            <Route 
+              path="/signup" 
+              element={<div className="flex-grow overflow-y-scroll h-full"><SignUp /></div>} 
+            />
           </Routes>
         </div>
       </div>
