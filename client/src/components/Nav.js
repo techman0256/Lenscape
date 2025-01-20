@@ -1,63 +1,152 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { FaHome, FaUser, FaSearch, FaComments, FaBell } from "react-icons/fa";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Avatar,
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
+import { FaHome, FaSearch, FaComments, FaBell } from "react-icons/fa"; // React Icons
+import useAuth from "../context"; // Your custom authentication hook
 
 const Navbar = () => {
+  // const { username, isAuthenticated, logout } = useAuth();
+  const username = "techman0256"
+  const isAuthenticated = true
+  const logout = false
+  const getURL = `/profile/${username}`;
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const menuItems = [
+    { text: "Home", icon: <FaHome />, path: "/" },
+    { text: "Search", icon: <FaSearch />, path: "/search" },
+    { text: "Chat", icon: <FaComments />, path: "/chat" },
+    { text: "Notifications", icon: <FaBell />, path: "/notifications" },
+  ];
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
-    <nav className="h-screen w-52 bg-[#2b0c78] flex flex-col items-start py-6 space-y-4 px-4">
-      {/* Logo Section */}
-      <div className="flex items-center justify-center w-full mb-6">
-        <h1 className="text-[#aa8bf3] text-3xl font-bold">L</h1>
-      </div>
+    <Box
+      sx={{
+        height: "100vh",
+        width: 240,
+        backgroundColor: "#2b0c78",
+        color: "#f9f8f4",
+        display: "flex",
+        flexDirection: "column",
+        py: 4,
+        px: 2,
+      }}
+    >
+      {/* Logo */}
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+        <Typography variant="h4" sx={{ fontWeight: "bold", color: "#aa8bf3" }}>
+          L
+        </Typography>
+      </Box>
 
-      {/* Navigation Links */}
-      <div className="flex flex-col items-start space-y-4 w-full">
-        {/* Home */}
-        <Link
-          to="/"
-          className="flex items-center text-[#f9f8f4] hover:text-[#aa8bf3] text-sm space-x-4 w-full px-4 py-2 rounded-lg hover:bg-[#310e8a] transition-all"
-        >
-          <FaHome className="text-2xl" />
-          <span className="text-sm">Home</span>
-        </Link>
+      {/* Menu Items */}
+      <List>
+        {menuItems.map((item, index) => (
+          <ListItem key={index} disablePadding>
+            <ListItemButton
+              component={Link}
+              to={item.path}
+              sx={{
+                px: 2,
+                py: 1.5,
+                borderRadius: 1,
+                "&:hover": {
+                  backgroundColor: "#310e8a",
+                  color: "#aa8bf3",
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: "inherit", minWidth: 40 }}>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
 
-        {/* Search */}
-        <Link
-          to="/search"
-          className="flex items-center text-[#f9f8f4] hover:text-[#aa8bf3] text-sm space-x-4 w-full px-4 py-2 rounded-lg hover:bg-[#310e8a] transition-all"
+      {/* Profile Section */}
+      {isAuthenticated && username ? (
+        <Box
+          sx={{
+            mt: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            gap: 1,
+          }}
         >
-          <FaSearch className="text-2xl" />
-          <span className="text-sm">Search</span>
-        </Link>
+          <Avatar
+            src={`https://ui-avatars.com/api/?name=${username}`} // Replace with actual profile image URL
+            alt={username}
+            sx={{
+              width: 60,
+              height: 60,
+              cursor: "pointer",
+              border: "2px solid #aa8bf3",
+              "&:hover": {
+                borderColor: "#fff",
+              },
+            }}
+            onClick={handleMenuOpen}
+          />
+          <Typography variant="body2" sx={{ color: "#f9f8f4" }}>
+            {username}
+          </Typography>
 
-        {/* Chat */}
-        <Link
-          to="/chat"
-          className="flex items-center text-[#f9f8f4] hover:text-[#aa8bf3] text-sm space-x-4 w-full px-4 py-2 rounded-lg hover:bg-[#310e8a] transition-all"
-        >
-          <FaComments className="text-2xl" />
-          <span className="text-sm">Chat</span>
-        </Link>
-
-        {/* Notifications */}
-        <Link
-          to="/notifications"
-          className="flex items-center text-[#f9f8f4] hover:text-[#aa8bf3] text-sm space-x-4 w-full px-4 py-2 rounded-lg hover:bg-[#310e8a] transition-all"
-        >
-          <FaBell className="text-2xl" />
-          <span className="text-sm">Notifications</span>
-        </Link>
-
-        {/* Profile */}
-        <Link
-          to="/profile"
-          className="flex items-center text-[#f9f8f4] hover:text-[#aa8bf3] text-sm space-x-4 w-full px-4 py-2 rounded-lg hover:bg-[#310e8a] transition-all"
-        >
-          <FaUser className="text-2xl" />
-          <span className="text-sm">Profile</span>
-        </Link>
-      </div>
-    </nav>
+          {/* Dropdown Menu */}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            PaperProps={{
+              sx: {
+                mt: 1,
+                backgroundColor: "#2b0c78",
+                color: "#f9f8f4",
+                "& .MuiMenuItem-root:hover": {
+                  backgroundColor: "#310e8a",
+                  color: "#aa8bf3",
+                },
+              },
+            }}
+          >
+            <MenuItem component={Link} to={getURL} onClick={handleMenuClose}>
+              Profile
+            </MenuItem>
+            <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+          </Menu>
+        </Box>
+      ) : (
+        <Typography variant="body2" sx={{ mt: "auto", color: "#f9f8f4" }}>
+          Please log in
+        </Typography>
+      )}
+    </Box>
   );
 };
 
