@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Post from "./Post";
-import ImageUpload from "./Upload/ImageUpload";
+import ImageUpload from "..//Upload/ImageUpload";
+// import { FaHeart, FaRegComment, FaShare } from 'react-icons/fa';
+import { TbLocationShare,  TbShare3} from "react-icons/tb";
+import { FaRegComment } from "react-icons/fa";
+import { FcLike } from "react-icons/fc";
+import { FcLikePlaceholder } from "react-icons/fc"
+import { GoHeart } from "react-icons/go";
 
-import useAuth from "../context";
+import useAuth from "../../context";
+import LikeButton from "./LIkeButton";
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
@@ -13,7 +20,11 @@ const Feed = () => {
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState("");
 
-  const { username, isAuthenticated, loading, verifyToken } = useAuth();
+  // const { username, isAuthenticated, loading, verifyToken } = useAuth();
+  const username = "techman0256"
+  const isAuthenticated = true
+  const loading = false
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -130,6 +141,12 @@ const Feed = () => {
     }
   };
   
+  const gotoUserProfile = () => {
+    // Redirect to the user's profile page
+    // history.push(`/profile/${post.username}`);
+    console.log("Going to user profile");
+  };
+
   const savePostImage = (uploadedURLs) => {
     console.log("going to setImage", uploadedURLs);
     setImage(uploadedURLs);
@@ -138,7 +155,7 @@ const Feed = () => {
 
   return (
     <div className="feed-container h-screen flex justify-center items-top bg-gray-100">
-      <div className="inner-feed w-full max-w-md bg-white rounded-lg overflow-y-scroll no-scrollbar">
+      <div className="inner-feed w-full max-w-md bg-gray-100 rounded-lg overflow-y-scroll no-scrollbar">
         <div
           className="new-post-bar p-3 flex items-center justify-between bg-gray-200 rounded-t-lg mb-4 cursor-pointer"
           onClick={handleOpenDialog}
@@ -154,15 +171,67 @@ const Feed = () => {
         </div>
 
         {posts.map((post, index) => (
-          <Post
-            key={index}
-            username={post.username}
-            avatarUrl={post.profileImage}
-            postImageUrl={post.images[0]}
-            likes={post.likes}
-            caption={post.caption}
-            comments={post.comments}
-          />
+          <div  className="post bg-white rounded-lg shadow-lg overflow-hidden max-w-[600px] mx-auto mb-6 border border-gray-100"  key={index}>
+            {/* User Info Section */}
+            <div className="flex items-center p-2 border-b border-gray-200" onClick={gotoUserProfile}>
+              <img
+                src={post.profileImage}
+                alt={`${post.username}'s avatar`}
+                className="w-10 h-10 rounded-full object-cover mr-3"
+              />
+              <span className="font-semibold text-gray-800">{post.username}</span>
+            </div>
+
+            {/* Post Image */}
+            <div className="post-image border-y border-gray-200">
+              <img
+                src={post.images[0]}
+                alt="Post"
+                className="w-full object-cover"
+              />
+            </div>
+
+            {/* Post Details */}
+            <div className="p-4">
+              {/* Likes */}
+              <div className="text-gray-600 mb-2 flex items-center space-x-2">
+                <span className="font-semibold">{post.likes}</span> likes
+              </div>
+
+              {/* Caption */}
+              <div className="text-gray-800 mb-2">
+                <span className="font-semibold">{post.username}</span> {post.caption}
+              </div>
+
+              {/* Comments */}
+              {post.comments && post.comments.length > 0 && (
+                <div className="text-sm text-gray-500 mb-2">
+                  View all {post.comments.length} comments
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-left text-gray-600 mt-3 space-x-5">
+                {/* Like Button */}
+                <button className="hover:text-red-500 transition ">
+                <LikeButton />
+                  </button>
+
+                  {/* Comment Button */}
+                  <button className="hover:text-purple-500 transition">
+                  <FaRegComment size={22} />
+                  </button>
+
+                  {/* Share Button */}
+                  <button className="hover:text-purple-500 transition">
+                  {/* <TbLocationShare size={24}/> */}
+                  <TbShare3 size={22}/>
+                  </button>
+              </div>
+            </div>
+
+            {/* <hr className="my-12 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50"/>  */}
+          </div>
         ))}
       </div>
 

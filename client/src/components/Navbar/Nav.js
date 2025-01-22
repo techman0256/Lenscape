@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { FaHome, FaSearch, FaComments, FaBell } from "react-icons/fa"; // React Icons
-import useAuth from "../context"; // Your custom authentication hook
+import useAuth from "../../context"; // Your custom authentication hook
 
 const Navbar = () => {
   // const { username, isAuthenticated, logout } = useAuth();
@@ -25,10 +25,10 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const menuItems = [
-    { text: "Home", icon: <FaHome />, path: "/" },
-    { text: "Search", icon: <FaSearch />, path: "/search" },
-    { text: "Chat", icon: <FaComments />, path: "/chat" },
-    { text: "Notifications", icon: <FaBell />, path: "/notifications" },
+    { text: "Home", icon: <FaHome size={20}/>, path: "/" },
+    { text: "Search", icon: <FaSearch size={20}/>, path: "/search" },
+    { text: "Chat", icon: <FaComments size={20}/>, path: "/chat" },
+    { text: "Notifications", icon: <FaBell size={20}/>, path: "/notifications" },
   ];
 
   const handleMenuOpen = (event) => {
@@ -60,7 +60,7 @@ const Navbar = () => {
       {/* Logo */}
       <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
         <Typography variant="h4" sx={{ fontWeight: "bold", color: "#aa8bf3" }}>
-          L
+          Lenscape
         </Typography>
       </Box>
 

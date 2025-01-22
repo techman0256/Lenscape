@@ -1,10 +1,11 @@
 .feed-container {
     scrollbar-width: thin; /* Firefox */
     scrollbar-color: #cbd5e0 #edf2f7; /* Thumb and Track Colors */
+    width: 50%;
   }
   
   .feed-container::-webkit-scrollbar {
-    width: 8px; /* Width of the scrollbar */
+    width: 2px; /* Width of the scrollbar */
   }
   
   .feed-container::-webkit-scrollbar-thumb {

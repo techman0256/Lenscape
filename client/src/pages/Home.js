@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';  // Use the new useNavigate hook
-import StoryBar from '../components/StoryBar'; 
-import Feed from '../components/Feed'; 
+import StoryBar from '../components/Stories/StoryBar'; 
+import Feed from '../components/Posts/Feed'; 
 import Sidebar from '../components/Sidebar'; 
 import './Home.css';
 import useAuth  from '../context';
 
 const Home = () => {
-  const { username, isAuthenticated, loading, verifyToken } = useAuth();
+  // const { username, isAuthenticated, loading, verifyToken } = useAuth();
   const navigate = useNavigate();  // Access the navigate function
+  const isAuthenticated = true
 
 
   if (isAuthenticated) {

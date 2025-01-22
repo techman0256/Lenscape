@@ -1,89 +1,119 @@
 import React, { useState, useEffect } from "react";
 import { FaUserCircle, FaPlusCircle } from "react-icons/fa";
 import Story from "./Story"; // Import the Story component
-import ImageUpload from "./Upload/ImageUpload"; // Import the ImageUpload component
+import ImageUpload from "../Upload/ImageUpload"; // Import the ImageUpload component
 
-import useAuth from "../context";
+import ReactStory from "./ReactStory";
+import Stories from "react-insta-stories";
+
+import useAuth from "../../context";
+
+// const story = [
+//   "https://picsum.photos/400/600", // Random story images
+//   "https://picsum.photos/401/601",
+//   "https://picsum.photos/402/602",
+//   "https://picsum.photos/403/603",
+// ]
+
+const story = [
+  {
+    header: {
+    heading: "John Doe",
+    profileImage: "https://picsum.photos/50/50", // Random profile image
+    },
+    urls: [
+      "https://picsum.photos/400/600", // Random story images
+      "https://picsum.photos/401/601",
+      "https://picsum.photos/402/602",
+      "https://picsum.photos/403/603",
+    ],
+}
+];
 
 const StoryBar = () => {
-  const [stories, setStories] = useState([]);
+  const [stories, setStories] = useState(story); // Initialize with a sample story);
   const [selectedStory, setSelectedStory] = useState(null);
   const [showImageUpload, setShowImageUpload] = useState(false); // To control the visibility of the upload dialog
   const { username, isAuthenticated, loading } = useAuth();
 
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState("");
+  console.log(stories, "this is the stories")
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await fetch(`http://127.0.0.1:4000/account/${username}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        });
+  
 
-        if (response.ok) {
-          const result = await response.json();
-          const profile = {
-            username: result.profile.username,
-            title: result.profile.title,
-            profileImage: result.profile.profileImage,
-            bio: result.profile.bio,
-          };
-          console.log(profile);
+  // useEffect(() => {
+  //   const fetchProfile = async () => {
+  //     try {
+  //       const response = await fetch(`http://127.0.0.1:4000/account/${username}`, {
+  //         method: "GET",
+  //         headers: { "Content-Type": "application/json" },
+  //         credentials: "include",
+  //       });
 
-          setProfile(profile);
-        } else {
-          const result = await response.json();
-          setError(result.message || "Profile not found");
-        }
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-        setError("Something went wrong. Please try again later.");
-      }
-    };
+  //       if (response.ok) {
+  //         const result = await response.json();
+  //         const profile = {
+  //           username: result.profile.username,
+  //           title: result.profile.title,
+  //           profileImage: result.profile.profileImage,
+  //           bio: result.profile.bio,
+  //         };
+  //         console.log(profile);
 
-    const fetchStories = async () => {
-      console.log("Calling fetch stories", username);
+  //         setProfile(profile);
+  //       } else {
+  //         const result = await response.json();
+  //         setError(result.message || "Profile not found");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching profile:", error);
+  //       setError("Something went wrong. Please try again later.");
+  //     }
+  //   };
 
-      try {
-        const response = await fetch("http://127.0.0.1:4000/stories/fetch", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username: username }),
-        }); // Adjust the API endpoint as needed
+  //   const fetchStories = async () => {
+  //     console.log("Calling fetch stories", username);
 
-        if (!response.ok) {
-          throw new Error(`Error fetching stories: ${response.statusText}`);
-        }
-        console.log(response);
+  //     try {
+  //       const response = await fetch("http://127.0.0.1:4000/stories/fetch", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ username: username }),
+  //       }); // Adjust the API endpoint as needed
 
-        const data = await response.json();
-        console.log("Fetched stories:", data);
+  //       if (!response.ok) {
+  //         throw new Error(`Error fetching stories: ${response.statusText}`);
+  //       }
+  //       console.log(response);
 
-        // Add 'My Story' entry at the beginning of the list
-        setStories([{ id: "myStory", heading: "My Story", profileImage: "", isAdd: true }, ...data]);
-      } catch (error) {
-        console.error("Error fetching stories:", error);
-      }
-    };
+  //       const data = await response.json();
+  //       console.log("Fetched stories:", data);
 
-    const initializeData = async () => {
-      if (!loading && isAuthenticated && username) {
-        // Wait for `useAuth` to resolve
-        await fetchProfile(); // Fetch profile details
-        await fetchStories(); // Fetch stories after profile is fetched
-      }
-    };
+  //       // Add 'My Story' entry at the beginning of the list
+  //       setStories([{ id: "myStory", heading: "My Story", profileImage: "", isAdd: true }, ...data]);
+  //     } catch (error) {
+  //       console.error("Error fetching stories:", error);
+  //     }
+  //   };
 
-    initializeData();
-  }, [loading, isAuthenticated, username]);
+  //   const initializeData = async () => {
+  //     if (!loading && isAuthenticated && username) {
+  //       // Wait for `useAuth` to resolve
+  //       await fetchProfile(); // Fetch profile details
+  //       await fetchStories(); // Fetch stories after profile is fetched
+  //     }
+  //   };
+
+  //   initializeData();
+  // }, [loading, isAuthenticated, username]);
 
   // Handle story click
   const handleStoryClick = (story) => {
+    console.log("Story clicked:", story);
+    
     setSelectedStory(story); // Set the selected story
   };
 
@@ -155,7 +185,14 @@ const StoryBar = () => {
       {/* Render Story component if a story is selected */}
       {selectedStory ? (
         <div>
-          <Story story={selectedStory} onClose={handleCloseStory} />
+          {/* <Story story={selectedStory} onClose={handleCloseStory} /> */}
+          {/* <Stories
+            stories={stories[0].urls}
+            defaultInterval={5000}
+            width={432}
+            height={768}
+          /> */}
+          <ReactStory story={selectedStory} onClose={handleCloseStory} />
         </div>
       ) : (
         <div className="stories-container flex overflow-x-auto space-x-4 py-4">
@@ -209,6 +246,10 @@ const StoryBar = () => {
         </div>
       )}
     </div>
+
+    // <div>
+
+    // </div>
   );
 };
 
